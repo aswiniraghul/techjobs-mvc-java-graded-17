@@ -29,22 +29,40 @@ public class SearchController {
 
     // TODO #3 - Create a handler to process a search request and render the updated search view.
     //added change search.html
-    @PostMapping(value = "results")
+//    @PostMapping(value = "results")
+//    public String displaySearchResults(Model model, @RequestParam String searchType, @RequestParam String searchTerm) {
+//        ArrayList<Job> jobs;
+//        if (searchType == null || searchType.isBlank() || searchType.equals("all")) {
+//            if (searchTerm == null || searchTerm.isBlank() || searchTerm.equals("all"))
+//                jobs = JobData.findAll();
+//            else
+//                jobs = JobData.findByValue(searchTerm);
+//            model.addAttribute("title", "All Jobs with keyword " + searchTerm);
+//        } else {
+//            jobs = JobData.findByColumnAndValue(searchType, searchTerm);
+//            model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": " + searchTerm);
+//        }
+//        model.addAttribute("jobs", jobs);
+//        model.addAttribute("columns", ListController.columnChoices);
+//        return "search";
+//    }
+//}
+
+    @PostMapping("results")
     public String displaySearchResults(Model model, @RequestParam String searchType, @RequestParam String searchTerm) {
         ArrayList<Job> jobs;
-        if (searchType == null || searchType.isBlank() || searchType.equals("all")) {
-            if (searchTerm == null || searchTerm.isBlank() || searchTerm.equals("all"))
-                jobs = JobData.findAll();
-            else
-                jobs = JobData.findByValue(searchTerm);
-            model.addAttribute("title", "All Jobs with keyword " + searchTerm);
+        if (searchTerm.toLowerCase().equals("all") || searchTerm.isBlank()) {
+            jobs = JobData.findAll();
         } else {
             jobs = JobData.findByColumnAndValue(searchType, searchTerm);
-            model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": " + searchTerm);
         }
+        model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": ");
         model.addAttribute("jobs", jobs);
-        model.addAttribute("columns", ListController.columnChoices);
+        model.addAttribute("columns", columnChoices);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchTerm", searchTerm);
         return "search";
     }
-}
 
+
+}
